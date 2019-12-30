@@ -1,5 +1,5 @@
 # algostudy
-프로그래밍 인사이트에서 출간한 [알고리즘 트레이닝](http://www.yes24.com/Product/Goods/42415865)
+프로그래밍 인사이트에서 출간한 [알고리즘 트레이닝 : 프로그래밍 대회 입문 가이드](http://www.yes24.com/Product/Goods/72274740)
 을 읽고 공부합니다. <br>
 매 주 일요일마다, 진도에 따른 review 파일을 올립니다.<br>
 
