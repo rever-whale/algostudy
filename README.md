@@ -14,4 +14,3 @@
 | 2020.02.16 | Chapter 8 (p.129\~142) | 8장. 알고리즘 설계 기법 | [Link](./study/week7/README.md) | [] |
 | 2020.02.23 | Chapter 9 (p.143\~156) | 9장. 구간 질의 | [Link](./study/week8/README.md) | [] |
 | 2020.03.01 | Chapter 10 (p.157\~174) | 10장. 트리 알고리즘 | [Link](./study/week9/README.md) | [] |
-
