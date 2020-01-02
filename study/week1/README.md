@@ -15,5 +15,5 @@
     2. 예제문제
 
 ## Review
-[SH의 Review](./week1_sh.md)
-[DH의 Review](./week1_dh.md)
+- [SH의 Review](./week1_sh.md)<br>
+- [DH의 Review](./week1_dh.md)
