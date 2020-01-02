@@ -86,3 +86,42 @@ n이 있는지 없는 지, <br>
 추후 다룰 효율성 챕터에서 언급하겠지만 해당 알고리즘의 시간 복잡도는 O(2^n)이다.
 
 https://codepen.io/rever-whale/pen/xxbXoMx
+
+
+#### 2.2.2 순열 생성하기
+순열을 생성하기 위해 일반적으로 사용할 수 있는 방법은 최초 값을 하나 정해서 해당 값으로 부터 다른 값들을 분기해나가며 확장하는 방법이다. <br>
+이를 간단히 정의하면 다음과 같다.
+
+```
+# 조건
+1) 순열의 길이가 전체 원소의 개수가 될 것
+2) 이전에 포함하지 않은 남은 값을 작은 순서대로 포함할 것
+2-1) 포함하지 않은 경우, 다음 순서로 미룬다.
+```
+
+```js
+// javascript
+
+var len = 3;
+var permutation = [];
+var chosen = new Array(len).fill(false);
+
+function search() {
+  if (permutation.length === len) {
+    console.log(permutation);
+  } else {
+    for (let i = 0; i < len; i++) {
+      if (!chosen[i]) {
+        chosen[i] = true;
+        permutation.push(i);
+        search();
+        chosen[i] = false;
+        permutation.pop();
+      }
+    }
+  }
+}
+
+```
+
+### 2.2.3 퇴각 검색
