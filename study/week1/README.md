@@ -14,5 +14,6 @@
     1. 시간 복잡도
     2. 예제문제
 
-
-[> back to the main](../../README.md)
+## Review
+[SH의 Review](./week1_sh.md)
+[DH의 Review](./week1_dh.md)
