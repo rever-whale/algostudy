@@ -137,11 +137,11 @@ function search() {
 ```js
 // 망할 백트래킹...
 
-var col = new Array(16).fill(0);
-var diag1 = new Array(16).fill(0);
-var diag2 = new Array(16).fill(0);
-var count = 0;
-var n = 4;
+const col = new Array(16).fill(0);
+const diag1 = new Array(16).fill(0);
+const diag2 = new Array(16).fill(0);
+const n = 4;
+let count = 0;
 
 function search(y = 0) {
   if (y === n) {
@@ -149,7 +149,7 @@ function search(y = 0) {
     return;
   }
 
-  for (var x = 0; x < n; x++) {
+  for (let x = 0; x < n; x++) {
     if (!(col[x] || diag1[x+y] || diag2[x-y+n-1])) {
       col[x] = diag1[x+y] = diag2[x-y+n-1] = 1;
       search(y+1);
