@@ -126,4 +126,4 @@ function search() {
 ```
 <br>
 <br>
-### 2.2.3 퇴각 검색
+
