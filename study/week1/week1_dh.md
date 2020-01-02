@@ -18,7 +18,7 @@
     기본적으로 표준 입출력 방식은 버퍼를 동기화해 사용한다. 따라서 c++ code에서 cin&cout과 printf&scanf를 혼용해서 쓰더라도 순서에 맞게 Thread safe하게 동작하는 것이다.<br/>
     하지만 동기화를 끊는다면 c++의 iostream만의 독립적인 버퍼를 생성하여 사용하고 버퍼 수가 줄기 때문에 실행 속도 자체는 향상한다. 하지만 해당 옵션을 false로 셋업하게 된다면, Thread safe하지 않게 된다.<br/>
     이 옵션은 Thread safe하지 않는 이유 때문에 실무에서는 거의 사용할 일이 없다고 생각한다. 하지만 알고리즘 대회는 보통 Single thread 환경에서 개발이 진행되기 때문에 사용하는 옵션인 것 같다.<br/><br/>
-    - cin.tie(NULL)
+    - cin.tie(NULL)<br/>
     cin을 cout으로부터 untie 하는 옵션이다.<br/>
     stream을 tie하면 다른 stream에서 입출력 요청이 오기 전에 stream을 flash 시킨다.<br/>
     이는 User에게 입출력 메시지를 보여주고(cout) 입력을 기다리는(cin)에서 cin과 cout이 tie 된 상태라면, Program이 user에게 입력을 요구하기 전에 output buffer를 flush하게 된다.<br/>
@@ -54,7 +54,7 @@
     - n <= 500          O(n^3)
     - n <= 5000         O(n^2)
     - n <= 10^6         O(nlongn) or O(n)
-    - n이 매우 클떄     O(1) or O(logn)
+    - n이 매우 클떄     O(1) or O(logn)<br/>
     물론 이 복잡도가 무조건 이 시간을 보장하는것은 아니지만, 최소한 알고리즘 문제를 읽고 해법 구상을 할 때 충분히 도움을 받을 수 있는 점이기 때문에 알고리즘 문제 풀이에 꼭 필요한 개념이라고 생각한다.<br/><br/>
     2. 예제문제
     - 최대 부분 배열 합
