@@ -127,3 +127,37 @@ function search() {
 <br>
 <br>
 
+### 2.2.3 퇴각 검색
+퇴각 검색이란, 비어있는 해로 탐색을 시작하고, 단계마다 해를 확장해 나가는 방식의 알고리즘이다. (간단히 말하면 현재 항으로 부터 파생 가능한 모든 항을 탐색할 수 없을 때까지 탐색한다.)
+
+책에서는 해당 알고리즘의 예제로 체스판을 들고 있다.<br> 
+
+두 개의 퀸이 4*4 체스판에서 서로 공격할 수 없는 배치를 구하기 위해선, 1개의 퀸을 배치하고, 모든 칸에 대해서 나머지 퀸의 위치를 탐색, 다시 다음 칸으로 재배치 후 같은 과정을 반복한다.
+
+```js
+// 망할 백트래킹...
+
+var col = new Array(16).fill(0);
+var diag1 = new Array(16).fill(0);
+var diag2 = new Array(16).fill(0);
+var count = 0;
+var n = 4;
+
+function search(y = 0) {
+  if (y === n) {
+    count++;
+    return;
+  }
+
+  for (var x = 0; x < n; x++) {
+    if (!(col[x] || diag1[x+y] || diag2[x-y+n-1])) {
+      col[x] = diag1[x+y] = diag2[x-y+n-1] = 1;
+      search(y+1);
+      col[x] = diag1[x+y] = diag2[x-y+n-1] = 0;
+    }
+  }
+}
+
+search();
+console.log(count);
+```
