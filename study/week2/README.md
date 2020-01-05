@@ -15,3 +15,7 @@
     3. 이진 탐색
         1. 이진 탐색 구현하기
         2. 최적해 구하기
+
+## Review
+- [SH의 Review](./week2_sh.md)<br>
+- [DH의 Review](./week2_dh.md)
