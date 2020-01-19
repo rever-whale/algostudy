@@ -107,7 +107,46 @@ void InsertionSort(std::vector<int>& arr)
 단점은 병합 정렬을 Array로 구현하면, 데이터의 임시 저장 공간이 필요하고 제자리 정렬을 구현할 수 없다.</br>
 보통 알고리즘 문제를 풀때는 시간 제한이 있으므로 링크드리스트의 포인터 이동까지 생각해가면서 구현할 시간이 없을수도 있다. 때문에 입력값이 매우 큰 경우 배열을 이용한 병합 정렬을 사용했을 경우 함수 안에서 임시배열을 선언하기 때문에 메모리 초과가 날 가능성이 높다.</br>
 ```c++
-// DHSEO : TODO - Marge Code
+void Marge(std::vector<int>& arr, std::vector<int>& sorted, int left, int mid, int right)
+{
+    int myLeft = left;
+    int myMid = mid + 1;
+    int sortedIdx = left;
+
+    while (myLeft <= mid && myMid <= right)
+    {
+        if (arr[myLeft] < arr[myMid])
+        {
+            sorted[sortedIdx++] = arr[myLeft++];
+        }
+        else
+        {
+            sorted[sortedIdx++] = arr[myMid++];
+        }
+    }
+
+    while (myLeft <= mid)
+    {
+        sorted[sortedIdx++] = arr[myLeft++];
+    }
+
+    for (int index = left; index < sortedIdx; index++)
+    {
+        arr[index] = sorted[index];
+    }
+}
+
+void MargeSort(std::vector<int>& arr, std::vector<int>& sorted, int left, int right)
+{
+    if (left < right)
+    {
+        int mid = (left + right) / 2;
+        MargeSort(arr, sorted, 0, mid);
+        MargeSort(arr, sorted, mid + 1, right);
+
+        Marge(arr, sorted, left, mid, right);
+    }
+}
 ```
 ##### 4.2.2 힙 정렬(Heap  sort)</br>
 최대 힙 트리(내림차순, 부모 노드가 자식 노드보다 큼)나 최소 힙 트리(오름차순, 자식 노드가 부모 노드보다 큼)를 구성해 정렬하는 정렬 방식으로 O(nlogn)의 복잡도를 가진다.</br>
@@ -121,7 +160,93 @@ void InsertionSort(std::vector<int>& arr)
 그리고 트리의 가장 마지막 노드를 루트 노드로 옮기고 루트를 기준으로 힙을 재구성하는 방식으로 정렬이 동작한다.</br>
 장점은 시간복잡도가 좋은 편이고, 가장 큰/작은 값 몇개만 필요한 경우 전체 정렬을 하기보다 힙 정렬을 이용하여 그 몇개만 찾아내는것이 더 유리하다.
 ```c++
-// DHSEO : TODO - Heap Code
+#define TOPDOWN 1
+#define BOTTOMUP 2
+#define WAY 1
+
+void sift_up(std::vector<int>& arr, int child)
+{
+    int parents;
+    
+    while (child > 0)
+    {
+        parents = (child % 2) == 0 ? (child - 1) / 2 : (child / 2);
+        if (arr[parents] >= arr[child])
+        {
+            return;
+        }
+
+        swap(arr, parents, child);
+        child = parents;
+    }
+}
+
+void sift_down(std::vector<int>& arr, int now, int last)
+{
+    int left = 0, right = 0, max = 0;
+
+    while ((now * 2) + 1 <= last)
+    {
+        left = now * 2 + 1;
+        right = (now * 2) + 2;
+        max = now;
+
+        if (arr[left] > arr[max])
+        {
+            max = left;
+        }
+
+        if (right <= last && arr[right] > arr[max])
+        {
+            max = right;
+        }
+
+        if (max != now)
+        {
+            swap(arr, now, max);
+            now = max;
+        }
+        else
+        {
+            return;
+        }
+    }
+}
+
+void heapify_top_down(std::vector<int>& arr)
+{
+    int index = 1;
+    int arrSize = arr.size();
+    while (index < arrSize)
+    {
+        sift_up(arr, index++);
+    }
+}
+
+void heapify_buttom_up(std::vector<int>& arr)
+{
+    int endVal = arr.size() - 1;
+    int now = (endVal % 2) == 0 ? (endVal - 1) / 2 : (endVal / 2);
+
+    while (now >= 0)
+    {
+        sift_down(arr, now--, endVal);
+    }
+}
+
+void HeapSort(std::vector<int>& arr)
+{
+    // Create Heap Tree
+    WAY == TOPDOWN? heapify_top_down(arr) : heapify_buttom_up(arr);
+
+    // Sorting logic
+    int endVal = arr.size() - 1;
+    while (endVal > 0)
+    {
+        swap(arr, 0, endVal--);
+        sift_down(arr, 0, endVal);
+    }
+}
 ```
 #### 4.3 정렬 알고리즘3</br>
 ##### 4.3.1 퀵 정렬(Quick  sort)</br>
