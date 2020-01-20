@@ -57,3 +57,123 @@ array[p...r]
 1. **분할.** ppp와 rrr의 중간 qqq를 찾습니다. 이진 검색에서 중간점을 찾았던 것과 같은 방법으로 이 과정을 수행합니다: ppp와 rrr을 더해서 2로 나눈 후 내림을 하여 정수로 만듭니다.
 2. **정복.** 분할 단계에서 만들어진 두 하위 문제 각각에 있는 하위 배열을 재귀적으로 정렬합니다. 즉 하위 배열 array[p..q]를 재귀적으로 정렬하고 또 하위 배열array[q+1..r]을 재귀적으로 정렬합니다.
 3. **결합.** 정렬된 두 하위 배열을 하나의 정렬된 하위 배열인 array[p..r]로 결합합니다.
+
+```js
+const mergeSort = list => {
+  const len = list.length;
+  if (len < 2) return list;
+  const middle = Math.floor(len);
+  const left = list.slice(0, middle);
+  const right = list.slice(middle, len);
+
+  return merge(mergeSort(left), mergeSort(right));
+}
+
+const merge = (left, right) => {
+  const result = [];
+
+  while (left.length && right.length) {
+    if (left[0] <= right[0]) result.push(left.shift());
+    else result.push(right.shift());
+  }
+
+  while (left.length) result.push(left.shift());
+  while (right.length) result.push(right.shift());
+
+  return result;
+}
+
+mergeSort([4,1,2,5,1,4,56,9]);
+
+// more js
+const mergeSort = list => {
+  const len = list.length;
+  if (len === 1) return list;
+
+  const center = Math.floor(len / 2);
+  const left = list.slice(0, center);
+  const right = list.slice(center);
+
+  return merge(mergeSort(left), mergeSort(right));
+}
+
+const merge = (left, right) => {
+  const results = [];
+
+  while (left.length && right.length) {
+    if (left[0] < right[0]) results.push(left.shift());
+    else results.push(right.shift());
+  }
+
+  return [...results, ...left, ...right];
+}
+
+```
+
+## 4.1.3 정렬의 하한
+배열을 O(n log n)보다 빠르게 정렬하는 것은 불가능하다.<br>
+그 하한에 대한 증명은 다음과 같다.
+
+정렬을 하기 위해선 기본적으로 두 원소의 비교가 필요하다.<br>
+결과는 두 가지 중 하나다. a가 b보다 크던가 b가 a보다 크던가.
+
+## 4-E 기타 정렬
+### 1. Quick Sort
+best, worst: O(n Log n)<br>
+퀵 정렬은 원리는 다음과 같다. 
+1. base case / 배열의 길이가 1이면 리턴한다. 
+2. 첫 번째 피벗은 마지막 항이다.
+3. 배열을 순회하며, 피벗보다 작은 숫자는 left로, 피벗보다 큰 숫자는 right으로 삽입한다.
+4. 모두 정렬될 때 까지 재귀로 돌며, 결과를 반환한다.
+
+```js
+function quickSort(array) {
+  if(array.length < 2) return array;
+
+  const pivot = array[array.length - 1];
+  const left = [],
+    right = [];
+
+  for(let i = 0; i < array.length - 1; i++) {
+    if(array[i] < pivot) left.push(array[i]);
+    else right.push(array[i]);
+  }
+
+  return [...quickSort(left), pivot, ...quickSort(right)];
+}
+```
+
+### 2. Counting Sort
+O(n+k)<br>
+계수 정렬. 배열의 길이를 알면 수행 가능.<br>
+선형 시간 내에 수행이 가능하다.<br>
+원리는 다음과 같다.
+
+1. 최대 값 크기의 배열 생성.
+2. 입력된 배열을 순회하며 해당 배열의 index를 카운트
+3. 생성한 배열을 순회하며 반환할 배열을 만듬
+
+```js
+function countingSort (array, max) {
+  const counts = new Array(max + 1);
+  counts.fill(0);
+  array.forEach(value => counts[value]++);
+
+  const result = [];
+  let resultIndex = 0;
+
+  counts.forEach((count, index) => {
+    for(let i = 0; i < count; i++) {
+      result[resultIndex] = index;
+      resultIndex++;
+    }
+  });
+
+  return result;
+}
+```
+
+
+
+## 참고 - 정렬 알고리즘의 시간복잡도 차트
+![](./chart.png)
