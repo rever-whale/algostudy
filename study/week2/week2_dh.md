@@ -10,6 +10,9 @@
 [영상자료1](https://www.youtube.com/watch?v=vmT3XUBoxiQ&feature=emb_logo), 
 [영상자료2](https://www.youtube.com/user/AlgoRythmics/videos)
 </br></br>
+개인적으로 이 챕터에 대해 리뷰를 하자면 정말 책을 대충 썼다는 생각이 든다. 정렬과 탐색은 알고리즘의 기반이 되는 아주 중요한 파트이기 때문에 책 제목대로 프로그래밍 대회 입문하는 사람이 이 책의 타겟이라면, 정말 도움이 될까 라는 생각이 많이 된다.</br>
+오히려 정렬과 탐색 부분은 입문자에게 책이 따로 하나 필요할 정도로 중요한 부분이라고 생각되는데, 어떤 생각으로 15페이지의 짧은 분량을 선정한 것인지 물어보고 싶다는 생각을 많이 했다.
+</br></br>
 
 ##### 4.1 정렬 알고리즘 : O(n^2)</br>
 ##### 4.1.1 버블 정렬(Bubble sort)</br>
@@ -19,11 +22,23 @@
 장점은 단순하기 때문에 정렬을 처음 배우는 사람들에게 정렬이란 무엇인가 설명하고 보여주기 편하다는 점이다.</br>
 때문에 거의 모든 자료구조/알고리즘의 책/강의 자료에서 정렬 파트의 가장 첫 부분을 버블 정렬이 많이 차지하고 있다.</br>
 단점은 가장 큰 값을 교환(swap)해가며 뒤로 빼는 방식이기 때문에, 이미 제 자리로 들어와 있는 원소들도 교환 과정에서 다른 자리로 이동될 수 있다는 점이다.</br>
-그리고 버블 정렬은 거의 모든 경우에서 최악의 성능을 보여주기 때문에(2중 포문에서 탐색 되는 모든 부분을 비교하고, 정렬을 위해서 SWAP을 이용함) 실제로 사용할 일이 거의 없다.</br>
+그리고 버블 정렬은 거의 모든 경우에서 최악의 성능을 보여주기 때문에(2중 포문에서 탐색 되는 모든 부분을 비교하고, 정렬을 위해서 SWAP을 이용함) 실제로 사용할 일이 거의 없다.
 ```c++
-// DHSEO : TODO - Bubble Code
+void BubbleSort(std::vector<int>& arr)
+{
+    int size = arr.size();
+    for (int turn = 0; turn < size; turn++)
+    {
+        for (int now = 0; now < size - turn - 1; now++)
+        {
+            if (arr[now] > arr[now + 1])
+            {
+                swap(arr, now, now + 1);
+            }
+        }
+    }
+}
 ```
-</br></br>
 ##### 4.1.2 선택 정렬(Selection  sort)</br>
 선택 정렬은 최소값을 찾아 맨 앞에 저장해가는 O(n^2)의 복잡도를 가진 정렬 방식이다.</br>
 배열의 가장 앞자리에서 라운드가 시작되며, 이번 라운드의 가장 최소값의 원소를 찾은 후 인덱스가 시작된 자리(라운드 첫번째 자리)의 값과 교환(Swap)한다.</br>
@@ -36,9 +51,27 @@
 그리고 선택 정렬은 정렬 과정에서 추가로 메모리가 필요하지 않는다.</br>
 단점은 이 또한 버블정렬과 마찬가지로 뒤에 4.2 파트에서 설명할 정렬 방식에 비해 비효율적인 방식이라는 점이다.
 ```c++
-// DHSEO : TODO - Selection Code
+void SelectionSort(std::vector<int>& arr)
+{
+    int size = arr.size();
+    for (int turn = 0; turn < size - 1; turn++)
+    {
+        int minIdx = turn;
+        for (int now = turn + 1; now < size; now++)
+        {
+            if (arr[minIdx] > arr[now])
+            {
+                minIdx = now;
+            }
+        }
+
+        if (turn != minIdx)
+        {
+            swap(arr, turn, minIdx);
+        }
+    }
+}
 ```
-</br></br>
 ##### 4.1.3 삽입 정렬(Insertion  sort)</br>
 삽입정렬은 선택된 인덱스 값 앞에 있는 정렬된 배열에 자기 자신의 위치를 찾아 삽입하는 O(n^2)의 복잡도를 가진 정렬 방식이다.</br>
 첫 라운드는 배열의 두 번째 인덱스(1)부터 시작하며, 앞 인덱스 값이 자기 자신의 값보다 크면 그 갚을 뒤로 밀고 작으면 뒤에 자기 자신을 삽입한다.</br>
@@ -46,39 +79,223 @@
 장점은 안정적인 정렬 방식이고, 개념 자체가 이해하기 쉽다는 점이다.</br>
 단점은 정렬의 대상이 매우 크다면 많은 수의 비교와 이동이 필요하다는 점이다. 그리고 많은 이동이 요하는 방식이다.</br>
 ```c++
-// DHSEO : TODO - Insertion Code
+void InsertionSort(std::vector<int>& arr)
+{
+    int size = arr.size();
+    for (int turn = 1; turn < size; turn++)
+    {
+        int key = arr[turn];
+
+        int now = turn - 1;
+        while (now >= 0 && arr[now] > key)
+        {
+            arr[now + 1] = arr[now];
+            now--;
+        }
+
+        arr[now + 1] = key;
+    }
+}
 ```
-</br></br></br>
 #### 4.2 정렬 알고리즘2 : O(nlogn)</br>
 ##### 4.2.1 병합 정렬(Marge  sort)</br>
+존 폰 노이만(John von Neumann)이 제안한 O(nlogn)의 복잡도를 가진 정렬로 흔히 말하는 분할정복(Divide and conquer)의 방식을 따른다.</br>
+분할(Divide)는 더 이상 나눌 수 없을때까지(원소가 하나만 존재할 때까지) 최대한 균등하게 2분할 해 나가는 부분이다.</br>
+정복(Conquer)은 분할의 역순으로 정렬하며 합쳐가는 과정이다. 정렬 방법은 현재 나누워져 있는 두 데이터의 가장 첫 데이터끼리 비교하여 더 작은 데이터를 합쳐질 데이터의 가장 앞에 두는 방식이다.</br>
+장점은 안정적인 정렬 방식으로, 입력 데이터가 무엇이던간에 정렬되는 방식과 시간은 동일하다.</br>
+또한 병합정렬을 Linked List로 구성하면, 데이터 이동 없이 포인터의 변경으로 구현 가능한 제자리 정렬(In-Place sorting) 방식으로 구현할 수 있다.</br>
+단점은 병합 정렬을 Array로 구현하면, 데이터의 임시 저장 공간이 필요하고 제자리 정렬을 구현할 수 없다.</br>
+보통 알고리즘 문제를 풀때는 시간 제한이 있으므로 링크드리스트의 포인터 이동까지 생각해가면서 구현할 시간이 없을수도 있다. 때문에 입력값이 매우 큰 경우 배열을 이용한 병합 정렬을 사용했을 경우 함수 안에서 임시배열을 선언하기 때문에 메모리 초과가 날 가능성이 높다.</br>
 ```c++
-// DHSEO : TODO - Marge Code
+void Marge(std::vector<int>& arr, std::vector<int>& sorted, int left, int mid, int right)
+{
+    int myLeft = left;
+    int myMid = mid + 1;
+    int sortedIdx = left;
+
+    while (myLeft <= mid && myMid <= right)
+    {
+        if (arr[myLeft] < arr[myMid])
+        {
+            sorted[sortedIdx++] = arr[myLeft++];
+        }
+        else
+        {
+            sorted[sortedIdx++] = arr[myMid++];
+        }
+    }
+
+    while (myLeft <= mid)
+    {
+        sorted[sortedIdx++] = arr[myLeft++];
+    }
+
+    for (int index = left; index < sortedIdx; index++)
+    {
+        arr[index] = sorted[index];
+    }
+}
+
+void MargeSort(std::vector<int>& arr, std::vector<int>& sorted, int left, int right)
+{
+    if (left < right)
+    {
+        int mid = (left + right) / 2;
+        MargeSort(arr, sorted, 0, mid);
+        MargeSort(arr, sorted, mid + 1, right);
+
+        Marge(arr, sorted, left, mid, right);
+    }
+}
 ```
-</br></br>
 ##### 4.2.2 힙 정렬(Heap  sort)</br>
+최대 힙 트리(내림차순, 부모 노드가 자식 노드보다 큼)나 최소 힙 트리(오름차순, 자식 노드가 부모 노드보다 큼)를 구성해 정렬하는 정렬 방식으로 O(nlogn)의 복잡도를 가진다.</br>
+참고로 힙 정렬은 오름차순으로 설명하는게 훨씬 편하니까 오름차순으로 설명하려고 한다.</br>
+힙(Heap)은 완전 이진 트리의 일종으로 우선순위 큐를 위하여 만들어진 자료구조로, 최댓값과 최솟값을 쉽게 확인 할 수 있는 자료구조이다.</br>
+여기서 완전 이진트리(Complete Binary Tree)는 데이터가 루트(Root) 노트에서 시작해 자식 노드가 왼쪽/오른쪽으로 연결되어있는 구조의 이진트리를 말한다. 즉, 중간에 노트가 비어있지 않고 가득 찬 구조를 의미한다.</br>
+힙정렬도 일종의 분할 정복 방식으로 구성할 수 있다.</br>
+정렬을 위해서는 힙 생성 알고리즘(Heapify Algorithem)을 이용하여 우선 n개의 노드에 대한 완전 이진트리를 구성해야 한다.</br>
+우선 트리에 삽입할 데이터를 트리의 가장 마지막 자리에 임시로 저장하고 부모 노드들과 비교하며 자기 자기 자리를 찾아간다.</br>
+트리 구성이 완성되면 정렬을 위하여 최대 힙을 삭제하는 과정이 필요하다. 이 또한 앞에 삽입 정렬과 유사한데, 최대 힙에서는 루트 노드가 가장 큰 값이므로 우선 루트 노드의 값을 삭제한다.</br>
+그리고 트리의 가장 마지막 노드를 루트 노드로 옮기고 루트를 기준으로 힙을 재구성하는 방식으로 정렬이 동작한다.</br>
+장점은 시간복잡도가 좋은 편이고, 가장 큰/작은 값 몇개만 필요한 경우 전체 정렬을 하기보다 힙 정렬을 이용하여 그 몇개만 찾아내는것이 더 유리하다.
 ```c++
-// DHSEO : TODO - Heap Code
+#define TOPDOWN 1
+#define BOTTOMUP 2
+#define WAY 1
+
+void sift_up(std::vector<int>& arr, int child)
+{
+    int parents;
+    
+    while (child > 0)
+    {
+        parents = (child % 2) == 0 ? (child - 1) / 2 : (child / 2);
+        if (arr[parents] >= arr[child])
+        {
+            return;
+        }
+
+        swap(arr, parents, child);
+        child = parents;
+    }
+}
+
+void sift_down(std::vector<int>& arr, int now, int last)
+{
+    int left = 0, right = 0, max = 0;
+
+    while ((now * 2) + 1 <= last)
+    {
+        left = now * 2 + 1;
+        right = (now * 2) + 2;
+        max = now;
+
+        if (arr[left] > arr[max])
+        {
+            max = left;
+        }
+
+        if (right <= last && arr[right] > arr[max])
+        {
+            max = right;
+        }
+
+        if (max != now)
+        {
+            swap(arr, now, max);
+            now = max;
+        }
+        else
+        {
+            return;
+        }
+    }
+}
+
+void heapify_top_down(std::vector<int>& arr)
+{
+    int index = 1;
+    int arrSize = arr.size();
+    while (index < arrSize)
+    {
+        sift_up(arr, index++);
+    }
+}
+
+void heapify_buttom_up(std::vector<int>& arr)
+{
+    int endVal = arr.size() - 1;
+    int now = (endVal % 2) == 0 ? (endVal - 1) / 2 : (endVal / 2);
+
+    while (now >= 0)
+    {
+        sift_down(arr, now--, endVal);
+    }
+}
+
+void HeapSort(std::vector<int>& arr)
+{
+    // Create Heap Tree
+    WAY == TOPDOWN? heapify_top_down(arr) : heapify_buttom_up(arr);
+
+    // Sorting logic
+    int endVal = arr.size() - 1;
+    while (endVal > 0)
+    {
+        swap(arr, 0, endVal--);
+        sift_down(arr, 0, endVal);
+    }
+}
 ```
-</br></br>
-##### 4.2.3 퀵 정렬(Quick  sort)</br>
+#### 4.3 정렬 알고리즘3</br>
+##### 4.3.1 퀵 정렬(Quick  sort)</br>
+찰스 앤터니 리처드 호어(Charles Antony Rechard Hoare)가 개발한 알고리즘 정렬로 최악의 경우 O(n^2), 평균 O(nlogn)의 복잡도를 가진다.</br>
+퀵정렬의 내부 루프는 메모리 참조가 지역화되어 있기 때문에 CPU 캐시의 히트율이 높아지기 때문에 대부분의 컴퓨터 아키텍쳐에서 효율적으로 작동하도록 설계되어 있다고 말한다. 때문에 대부분의 언어의 Standard sort가 Qucik sort 기반으로 많이 구현이 되어 있다.</br>
+퀵 정렬 또한 피벗(Pivot)을 기준으로 분할 정복(Divide and Conquer) 방법을 통하여 리스트를 정리한다.</br>
+###### 4.3.1.1 일정한 룰에 따라 리스트의 한 부분을 피벗으로 선정한다. 참고로 피벗 선정 기준은 보통 가장 처음 혹은 중간으로 룰을 정하는 경우가 많고 이 또한 개발자가 어떤 룰을 정했느냐에 따라 구현 코드가 달라진다.)</br>
+###### 4.3.1.2 정해진 피벗 앞에는 피벗보다 값이 작은 원소들을, 피벗 뒤에는 피벗보다 값이 큰 원소들을 분할한다. 분할을 마친 후 피벗은 더 이상 움직이지 않는다.</br>
+###### 4.3.1.3 분할 된 두 개의 리스트에서 재귀적으로 위 과정을 반복한다.("4.3.1.1"로 돌아감) 재귀는 리스트의 크기가 0이나 1이 될때까지 반복한다.</br>
+장점은 시간 복잡도가 O(nlogn)을 가지는 다른 정렬 알고리즘과 비교해보았을 때도 속도가 빠르다는 점이다. 또한 추가 메모리 공간을 필요로 하지 않는다. O(logn) 만큼의 메모리만 필요로 한다.</br>
+단점은 정렬된 리스트에 대해서는 퀵 정렬의 불균형 분할에 의해 오히려 정렬 시간이 오래 걸린다. 이는 피벗 선정 기준에 따라 불균형 분할로 이어질 가능성이 높기 때문이다. 때문에 피벗의 선정 기준이 퀵 정렬의 성능에 지대한 영향을 끼친다.
 ```c++
 // DHSEO : TODO - Quick Code
 ```
-</br></br></br>
-#### 4.3 정렬을 이용한 문제풀이</br>
-##### 4.3.1 스윕 라인 알고리즘(Sweep line algorithm)</br>
-
+##### 4.3.2 인트로 정렬(Intro Sort)</br>
+C++의 Standard sort(algorithm.h)에서 사용하는 정렬 방식으로 하이브리드 정렬 알고리즘이다. Introsort는 Quick sort, Heap sort, Insertion sort를 사용하여 실행시간을 최소화 한다.</br>
+퀵정렬은 피벗을 기준으로 분할하고 재귀를 이용하여 과정을 반복하는 방식인데, 분할되는 횟수가 많을 수록 오버헤드에 의한 성능 저하가 발생한다. 이와 같은 성능 저하를 방지하기 위해 분할되는 횟수를 스스로 감시하다 정의한 임계값에 도달 했을 경우 다른 정렬 방식으로 스위칭하는 방식이 인트로 정렬이다.</br>
+###### 4.3.2.1 정렬될 요소의 수가 임계 값 미만이면 삽입 정렬(Insertion sort)을 한다.</br>
+###### 4.3.2.2 전체 리스트에 대해 퀵 정렬(Quick sort)을 수행한다.</br>
+###### 4.3.2.3 수행 도중 재귀의 깊이(Recursion depth)가 정렬되는 요소의 수를 기준으로 일정 레벨을 초과하면 정렬을 중단하고 "4.3.2.4" 항목으로 이동한다.</br>
+###### 4.3.2.4 현재 정렬중인 부분 리스트가 임계 값 미만이면 그대로 퀵 정렬(Quick sort)을 수행한다. 하지만 임계 값 이상이면 현재 정렬 할 리스트에 대하여 힙 정렬(Heap sort)을 수행한다.</br>
+###### 4.3.2.5 "4.3.2.3" "4.3.2.4" 과정이 모두 완료된 후 전체 정렬에 대해 삽입 정렬(Insertion sort)을 수행한다.</br>
+이는 데이터가 적을 때는 삽입 정렬이 퀵 정렬보다 더 빠르다는 것에 의거한 하이브리드 정렬 방식이다. 또한 데이터가 거의다 정렬 되었을 시에도 퀵 정렬보다 삽입 정렬이 더 빠르기 때문에 마지막 과정도 삽입 정렬을 사용하는 것이다.</br>
+이를 이용하면 퀵 정렬의 최악의 경우인 O(n^2)가 나오지 않는 결과를 얻게 된다.</br>
+때문에 C++의 Standard sort에서 인트로 정렬을 채택한것이 아닌가 생각이 든다.</br>
+구현 자체는 퀵 정렬과 힙 정렬 그리고 삽입 정렬을 이용하면 되기 떄문에 생략한다.
 </br></br>
-##### 4.3.2 이벤트 스케쥴링</br>
-
+#### 4.4 정렬을 이용한 문제풀이</br>
+##### 4.4.1 스윕 라인 알고리즘(Sweep line algorithm)</br>
+스윕 라인 알고리즘은 정렬된 순서대로 처리되는 이벤트의 집합으로 문제를 모델링 하는 방법이다.</br>
+이 책에서는 한 시기에 음식점에 가장 많은 손님이 있을 때 그 수를 구하는 문제를 가정하여 설명한다.</br>
+이는 카운트를 이용하여 손님이 들어오는 이벤트가 발생하면 카운트를 하나 올리고, 손님이 떠날때 카운트를 하나 내리는 방식으로 최대 카운트 값을 구하는 방식으로 설명하고 있다.</br>
+보통 이런류의 문제를 풀때 유의해야 할 것이 결국 두개의 이벤트로 인하여 값이 공용되는 일종의 임계영역이 발생하기 때문에 뮤텍스와 같은 동기화 메커니즘이 필수로 필요하다는 점이다.
+</br>
+##### 4.4.2 이벤트 스케쥴링</br>
+책의 이 파트에서는 입력 데이터를 정렬한 후 탐욕법 기반의 전략(Greedy strategy)로 해를 구하여 풀 수 있는 스케쥴링을 설명한다.</br>
+이것을 설명할 때 어느 이벤트의 시작 시간과 끝 시간이 주어졌을 때 가장 많은 이벤트를 처리하는 경우를 찾는 문제가 선정되었다. 그리고 이벤트 종료 시간을 기준으로 정렬 한 후 스케쥴링 할 수 있는 이벤트 중에서 가장 먼저 종료하는 것을 차례대로 선택해 나가는 솔루션을 제시한다.</br>
+이 책이 무슨 말을 하려고 하는것은 이해가 되나, 책의 설명을 보면 이런 류의 문제는 이런 방식으로 풀면 된다는 답정너 스타일로 설명이 되어 있다.</br>
+보통 문제에 따라서 "어느 기준으로 스케쥴을 선정하는 기준을 짜는가"가 문제의 핵심인 경우가 많다.</br>
+만약 이 책을 읽은 독자가 이런 류의 문제가 끝나는 시간을 기준으로 풀면 모두 다 풀리는줄 알고 오해한다면 문제가 될 소지가 있어 보인다는 점이 아쉽다.
+</br>
+##### 4.4.3 작업과 데드라인</br>
+이 파트에서는 작업의 소요 시간과 데드라인이 주어졌을 때, 이 작업을 어떤 순서로 처리하는가에 대한 문제가 주어지는데 설명을 읽고 그냥 넘어갔기 때문에 쓸 말이 없다.
 </br></br>
-##### 4.3.3 작업과 데드라인</br>
-
-</br></br></br>
-#### 4.4 이진탐색</br>
-##### 4.4.1 이진탐색 구현하기</br>
-
-</br></br>
-##### 4.4.2 최적해 구하기</br>
-
-</br></br>
+#### 4.5 이진탐색</br>
+##### 4.5.1 이진탐색 구현하기</br>
+이진 탐색을 하는 두 가지 경우의 수를 설명하는 파트이다.</br>
+4.5.1.1 사전에서 단어를 찾는 방식으로 설명한다. 이는 배열의 전체 중 중앙 값을 검색한 후 찾고자 하는 값이 현재 비교 대상보다 크다면 아래 값들을 버리는 방식으로 진행된다.
+4.5.1.2 배열을 왼쪽에서 오른쩍으로 건너 뛰어가면서 살펴보는 방식으로 설명한다. 건너 뛸 원소를 n/2, n/4, n/8 과 같은 식으로 정해진다.
+</br>
+##### 4.5.2 최적해 구하기</br>
+이 부분도 딱히 설명할 말이 없다.
