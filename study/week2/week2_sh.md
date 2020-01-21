@@ -117,33 +117,7 @@ const merge = (left, right) => {
 정렬을 하기 위해선 기본적으로 두 원소의 비교가 필요하다.<br>
 결과는 두 가지 중 하나다. a가 b보다 크던가 b가 a보다 크던가.
 
-## 4-E 기타 정렬
-### 1. Quick Sort
-best, worst: O(n Log n)<br>
-퀵 정렬은 원리는 다음과 같다. 
-1. base case / 배열의 길이가 1이면 리턴한다. 
-2. 첫 번째 피벗은 마지막 항이다.
-3. 배열을 순회하며, 피벗보다 작은 숫자는 left로, 피벗보다 큰 숫자는 right으로 삽입한다.
-4. 모두 정렬될 때 까지 재귀로 돌며, 결과를 반환한다.
-
-```js
-function quickSort(array) {
-  if(array.length < 2) return array;
-
-  const pivot = array[array.length - 1];
-  const left = [],
-    right = [];
-
-  for(let i = 0; i < array.length - 1; i++) {
-    if(array[i] < pivot) left.push(array[i]);
-    else right.push(array[i]);
-  }
-
-  return [...quickSort(left), pivot, ...quickSort(right)];
-}
-```
-
-### 2. Counting Sort
+## 4.1.4 계수 정렬
 O(n+k)<br>
 계수 정렬. 배열의 길이를 알면 수행 가능.<br>
 선형 시간 내에 수행이 가능하다.<br>
@@ -173,7 +147,93 @@ function countingSort (array, max) {
 }
 ```
 
+## 4.1.5 실제 상황에서의 정렬
+**실제 상황에서는 정렬 알고리즘을 직접 구현할 필요가 있는 경우가 거의 없다.** (나는 이걸 왜 했지...)
+
+자바스크립트 엔진 중 가장 유명한 v8 엔진은 내장 sort를 `tim sort`로 구현하고 있다. 책에는 c++에 관한 이야기기 았지만, 여기선 v8 엔진의 정렬 알고리즘에 대해 풀어볼까 한다. [v8 blog - array sort](https://v8.dev/blog/array-sort)
+
+팀 정렬은 `hybrid stable sorting algorithm`이다.<br>
+팀 정렬의 특징은 다음과 같다.
+1. 현실 세계의 배열은 완전히 불균형적이지 않다. (실제로 부분적으로 많은 배열이 정렬되어있다.)
+2. Merge Sort와 [Insert Sort](#2-Insertion-Sort)의 개념을 사용한다.
+3. input 사이즈에 따라 다른 알고리즘을 적용하는 adaptive algorithm이다.
+
+### Operation
+1. n개의 요소로 된 배열을 처음부터 살펴보면서 1) non-decending or 2) strictly descending 데이터를 찾는다.
+    1. 해당 알고리즘에선 이러한 부분 배열을 run이라고 일컫는다.
+    2. 즉, 데이터를 처음부터 살펴보면서, 정렬되어있거나, 역순 정렬된 데이터를 찾고 하나의 run으로 분류 한다.
+2. 정렬되지 않은 데이터의 경우, minrun이라는 일정 단위로 데이터를 자른다.
+    1. 보통 2^5 ~ 2^6을 유지한다. 2의 지수승인 이유는, 추후 merge할 때 조건 만족 시 훨씬 수월하기 때문이다.
+    2. 임의로 자른 데이터들을 insertion sort 한다.
+    3. 정렬이 되었음으로 이 또한 run으로 간주할 수 있게 된다. 
 
 
-## 참고 - 정렬 알고리즘의 시간복잡도 차트
+## 4-E 기타 정렬
+### 1. Quick Sort
+best, worst: O(n Log n)<br>
+퀵 정렬은 원리는 다음과 같다. 
+1. base case / 배열의 길이가 1이면 리턴한다. 
+2. 첫 번째 피벗은 마지막 항이다.
+3. 배열을 순회하며, 피벗보다 작은 숫자는 left로, 피벗보다 큰 숫자는 right으로 삽입한다.
+4. 모두 정렬될 때 까지 재귀로 돌며, 결과를 반환한다.
+
+```js
+function quickSort(array) {
+  if(array.length < 2) return array;
+
+  const pivot = array[array.length - 1];
+  const left = [],
+    right = [];
+
+  for(let i = 0; i < array.length - 1; i++) {
+    if(array[i] < pivot) left.push(array[i]);
+    else right.push(array[i]);
+  }
+
+  return [...quickSort(left), pivot, ...quickSort(right)];
+}
+```
+
+### 2. Insertion Sort
+삽입 정렬이란, 버블 정렬처럼 모든 값을 비교한다.<br>하지만 `swap` 대신 순서대로 `splice`한다. 사실상, 처음 입력된 배열의 순서를 계속 바꾸고 반환한다. 이 탐욕 알고리즘은 `quadratic time` O(n&2) 의 시간 복잡도를 필요로 한다.
+
+>버블정렬과 같은 O(n^2)임에도, 같은 경우에 삽입 정렬을 사용하는 이유는 해당 알고리즘이 데이터를 쓰는 횟수가 더 적기 때문에 읽기가 빠르고 쓰기가 느린 상태인 경우, 삽입 정렬이 훨씬 나은 성능을 낼 수 있기 때문이다.
+
+```js
+function insertionSort(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] < arr[0]) {
+      // case1 첫 번째 항보다 작은 경우, 맨 앞으로 넣는다.
+      arr.unshift(arr.splice(i, 1)[0]);
+    } else if (arr[i] > arr[i-1]) {
+      // case2 현재 항이 이전 항보다 큰 경우 패스한다.
+      continue;
+    } else {
+      // case3 정렬이 되있지 않은 경우 순회 정렬한ㄷ나.
+      for (let j = 0; j < i; j++) {
+        if (arr[i] > arr[j-1] && arr[i] < arr[j]) {
+          arr.splice(j, 0, arr.splice(i, 1)[0]);
+        }
+      }
+    }
+  }
+
+  return arr;
+}
+```
+
+
+
+### 참고 - 정렬 알고리즘의 시간복잡도 차트
 ![](./chart.png)
+
+---
+
+## 4. 탐색 알고리즘
+
+
+
+
+
+## etc..
+- [마크다운 내부 링크 방법](https://a1010100z.tistory.com/entry/Markdown-%EB%A7%88%ED%81%AC%EB%8B%A4%EC%9A%B4-%EB%AC%B8%EC%84%9C-%EB%82%B4%EB%B6%80-%EB%A7%81%ED%81%AC-%EC%9D%B4%EB%8F%99)
