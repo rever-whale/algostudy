@@ -14,3 +14,7 @@
     3. 실험
         1. 집합과 정렬
         2. 우선순위 큐와 멀티셋
+
+## Review
+- [SH의 Review](./week2_sh.md)<br>
+- [DH의 Review](./week2_dh.md)
