@@ -12,3 +12,8 @@
         3. 짐 싸기 문제
         4. 순열을 부분집합으로 바꾸기
         5. 타일 세기
+
+
+## Review
+- [SH의 Review](./week4_sh.md)<br>
+- [DH의 Review](./week4_dh.md)
