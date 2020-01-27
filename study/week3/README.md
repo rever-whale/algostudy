@@ -16,5 +16,5 @@
         2. 우선순위 큐와 멀티셋
 
 ## Review
-- [SH의 Review](./week2_sh.md)<br>
-- [DH의 Review](./week2_dh.md)
+- [SH의 Review](./week3_sh.md)<br>
+- [DH의 Review](./week3_dh.md)
